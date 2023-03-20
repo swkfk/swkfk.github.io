@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/cf.png">
+  <link rel="icon" href="/img/cf.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kai_Ker">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述众所周知，在 Excel 表格中，用大写英文字母来表示列数。比如， A 表示第1列，Z 表示第26列，而 AA 表示第27列，AB 表示第28列。 但是，我们的 Musha 她桀骜不驯，她决定删去一些她不喜欢的字母组合，比如 WA TLE 啥的。具体而言，假设只删去 B，那么第2列所对应的就是 C；假设只删去 AA AB，那么第27列所对应的就是 AC。 现在，给你一个列数，要求打印出它的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C 语言题目：绝妙的表格">
+<meta property="og:url" content="https://swkfk.github.io/2023/01/18/C-%E8%AF%AD%E8%A8%80%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BB%9D%E5%A6%99%E7%9A%84%E8%A1%A8%E6%A0%BC/index.html">
+<meta property="og:site_name" content="kai_Ker&#39;s blog">
+<meta property="og:description" content="题目描述众所周知，在 Excel 表格中，用大写英文字母来表示列数。比如， A 表示第1列，Z 表示第26列，而 AA 表示第27列，AB 表示第28列。 但是，我们的 Musha 她桀骜不驯，她决定删去一些她不喜欢的字母组合，比如 WA TLE 啥的。具体而言，假设只删去 B，那么第2列所对应的就是 C；假设只删去 AA AB，那么第27列所对应的就是 AC。 现在，给你一个列数，要求打印出它的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://swkfk.github.io/img/K01_01.png">
+<meta property="article:published_time" content="2023-01-18T10:22:21.000Z">
+<meta property="article:modified_time" content="2023-03-17T12:09:27.070Z">
+<meta property="article:author" content="kai_Ker">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://swkfk.github.io/img/K01_01.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C 语言题目：绝妙的表格 - kai_Ker&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"swkfk.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kai_Ker&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C 语言题目：绝妙的表格"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-18 18:22" pubdate>
+          2023年1月18日 18:22
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C 语言题目：绝妙的表格</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>众所周知，在 Excel 表格中，用大写英文字母来表示列数。比如， <code>A</code> 表示第1列，<code>Z</code> 表示第26列，而 <code>AA</code> 表示第27列，<code>AB</code> 表示第28列。</p>
+<p>但是，我们的 Musha 她桀骜不驯，她决定删去一些她不喜欢的字母组合，比如 <code>WA</code> <code>TLE</code> 啥的。具体而言，假设只删去 <code>B</code>，那么第2列所对应的就是 <code>C</code>；假设只删去 <code>AA</code> <code>AB</code>，那么第27列所对应的就是 <code>AC</code>。</p>
+<p>现在，给你一个列数，要求打印出它的字母表示。</p>
+<h4 id="输入与输出格式"><a href="#输入与输出格式" class="headerlink" title="输入与输出格式"></a>输入与输出格式</h4><h5 id="Input"><a href="#Input" class="headerlink" title="Input"></a>Input</h5><p>第$1$行两个 <code>int</code> 以内的整数 <code>col</code> 与 <code>n</code>，<code>col</code> 表示所求目标列数（不会为$0$），<code>n</code> 表示待删去字母组合的个数。</p>
+<p>第$2$至$n+1$行，每行一个字符串，表示需要删去的字母组合。所有给出的字符串不重复，并且按照列数的递增排列。</p>
+<h5 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h5><p>一行一个由大写字母组成的字符串，表示在删去相关组合的前提下，列数 <code>col</code> 所代表的字母表示。</p>
+<h5 id="输入样例-1"><a href="#输入样例-1" class="headerlink" title="输入样例 #1"></a>输入样例 #1</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">2147483647 0<br></code></pre></td></tr></table></figure>
+
+<h5 id="输出样例-1"><a href="#输出样例-1" class="headerlink" title="输出样例 #1"></a>输出样例 #1</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">FXSHRXW<br></code></pre></td></tr></table></figure>
+
+<h5 id="输入样例-2"><a href="#输入样例-2" class="headerlink" title="输入样例 #2"></a>输入样例 #2</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">27 2<br>AA<br>AB<br></code></pre></td></tr></table></figure>
+
+<h5 id="输出样例-2"><a href="#输出样例-2" class="headerlink" title="输出样例 #2"></a>输出样例 #2</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">AC<br></code></pre></td></tr></table></figure>
+
+<h5 id="输入样例-3"><a href="#输入样例-3" class="headerlink" title="输入样例 #3"></a>输入样例 #3</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">29 3<br>WA<br>REG<br>TLE<br></code></pre></td></tr></table></figure>
+
+<h5 id="输出样例-3"><a href="#输出样例-3" class="headerlink" title="输出样例 #3"></a>输出样例 #3</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">AC<br></code></pre></td></tr></table></figure>
+
+<h5 id="数据范围"><a href="#数据范围" class="headerlink" title="数据范围"></a>数据范围</h5><p>对于 $30%$ 的数据，$\text{n}&#x3D;0$</p>
+<p>对于另外 $30%$ 的数据，$\text{n}&#x3D;1$</p>
+<p>对于 $100%$ 的数据，$1 \leqslant \text{col} \leqslant 2147483647$，$0 \leqslant \text{n} \leqslant 100000$ 并保证所输出的字母表示的真实值不超过 <code>int</code> 范围</p>
+<h3 id="Hint"><a href="#Hint" class="headerlink" title="Hint"></a>Hint</h3><p>提供两个<strong>方向不同</strong>的思路，希望可以有所启发：</p>
+<p>【思路一】与通常情况的进制转换不同，在题设环境中，<strong>每一位</strong>所代表的数字的取值都为 1~26，那我们为什么不把它变成 0~25 的范围呢，这样就可以愉快地取模、做除法了。或者是，哪怕只变一部分呢，比如，，，比如最后一位？</p>
+<p>【思路二】或者我们干脆就把它按照常规的二十六进制写出来，那遇到 0 怎么办？是不是可以，，，可以向人家借呢？</p>
+<hr>
+<h3 id="命题背景"><a href="#命题背景" class="headerlink" title="命题背景"></a>命题背景</h3><p>原题链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/excel-sheet-column-title/">168. Excel表列名称 - 力扣</a></p>
+<p>在原题的基础上增加了 “删去某些字母组合” 的要求。</p>
+<p>拓展题目：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/CF1B">洛谷 CF1B Spreadsheets</a></p>
+<h3 id="题目分析（思路一）"><a href="#题目分析（思路一）" class="headerlink" title="题目分析（思路一）"></a>题目分析（思路一）</h3><p>首先是考虑如何让将数字转换为字母，我们先假设 $703&#x3D;x&#x3D;\text{AAA}$，其中，每一个 $\text{A}$ 均代表<strong>该位</strong>的 $1$，但如果我们重新规定一下，<strong>最后一位</strong>的字母所代表的数字的取值范围是 0~25，而不是前面的 1~26，也即 $\text{AAA}’&#x3D;x-1$，这样，$(x-1)%26$ 的值，就是 $\text{A}’$ 的值，$0$，而 $(x-1)&#x2F;26$ 则是 $27&#x3D;\text{AA}$。</p>
+<p>利用这个思路，我们可以写出一个数字转字母组合的函数，见参考代码中 <code>void converToString(int)</code> 的实现。</p>
+<p>其次考虑将字母组合转化成数字，这个不难，从最低位开始，依次为 $26^0$，$26^1$，$\cdots$，见参考代码中 <code>int converToNumber(const char[])</code> 的实现。</p>
+<p>最后一个点是如何处理哪些被删去的字母组合，因为它们是<strong>有序</strong>的，我们可以一个一个读取，将它们转换成数字，与我们的目标进行比较。如果待删去的数字<strong>小于或者等于</strong>目标数字，就将目标数字向后挪一位；一旦待删去的数字比目标数字大，那么后面也就没有必要再去读取了，可以直接<strong>提前结束</strong>这个过程。</p>
+<h4 id="参考代码（思路一）"><a href="#参考代码（思路一）" class="headerlink" title="参考代码（思路一）"></a>参考代码（思路一）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">convertToString</span><span class="hljs-params">(<span class="hljs-type">int</span> col)</span> &#123;<br>    <span class="hljs-type">char</span> res[<span class="hljs-number">10</span>];<br>    <span class="hljs-type">int</span>  pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (col) &#123;<br>        res[pos++] = (col - <span class="hljs-number">1</span>) % <span class="hljs-number">26</span> + <span class="hljs-string">&#x27;A&#x27;</span>;<br>        col = (col - <span class="hljs-number">1</span>) / <span class="hljs-number">26</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = pos - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        <span class="hljs-built_in">putchar</span>(res[i]);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 使用 const 限定，防止误修改</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">convertToNumber</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> s[])</span> &#123;<br>    <span class="hljs-type">int</span> len = <span class="hljs-built_in">strlen</span>(s);<br>    <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>, ratio = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = len - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        res += ratio * (s[i] - <span class="hljs-string">&#x27;A&#x27;</span> + <span class="hljs-number">1</span>);<br>        ratio *= <span class="hljs-number">26</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span>  col, n;<br>    <span class="hljs-type">int</span>  discard_num;<br>    <span class="hljs-type">char</span> discard_alpha[<span class="hljs-number">10</span>];<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;col, &amp;n);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%s&quot;</span>, discard_alpha);<br>        discard_num = convertToNumber(discard_alpha);<br>        <span class="hljs-keyword">if</span> (discard_num &lt;= col) &#123;<br>            ++col;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    convertToString(col);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="题目分析（思路二）"><a href="#题目分析（思路二）" class="headerlink" title="题目分析（思路二）"></a>题目分析（思路二）</h3><p>只考虑数字转换成字母的方法，思考一下通常的进制转换的做法，比如对 $702$ 进行连续取模与除法，可以得到：$702&#x3D;1\times26^2+1\times26^1+0\times26^0$，也就是如下代码会得到的结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">i = <span class="hljs-number">-1</span>;<br><span class="hljs-keyword">while</span> (n) &#123;<br>    res[++i] = n % <span class="hljs-number">26</span>;<br>    n /= <span class="hljs-number">26</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>所以我们的下一步是考虑，如何将这些不和谐的 $0$ 给干掉。如果大家联想到了竖式减法的 <strong>“借一当十”</strong>，那么这里也可以类似的处理。比如，我们可以把第二位的 $1\times26^1$ 拿一个 $26$ 过来，放到第一位（后面有图说明），写成 $702&#x3D;1\times26^2+0\times26^1+26\times26^0$，再考虑第二位，又有一个 $0$，那么就可以问第三位去要，写成 $702&#x3D;0\times26^2+26\times26^1+26\times26^0$，这样我们要的结果就是 $(26,26)\Rightarrow ZZ$ 了。</p>
+<p>这里还要考虑一个问题：如果前面有好几个连在一起的 $0$，那我去和谁借？可以使用 <code>while</code> 一直向前找，但其实不需要这样麻烦，直接借呗，借成 $-1$ 也无所谓，循环到这个 $-1$ 的时候再向继续前面借就可以了，于是，需要向前借的条件是某一位<strong>小于或等于 0</strong>。</p>
+<img src="/img/K01_01.png" srcset="/img/loading.gif" lazyload>
+
+<h4 id="参考代码（思路二）"><a href="#参考代码（思路二）" class="headerlink" title="参考代码（思路二）"></a>参考代码（思路二）</h4><p>其他部分与“思路一”保持一致，这里需要弄清楚<strong>遍历的顺序</strong>，数组里面，哪一位是“前”，哪一位是“后”，输出的时候要不要倒过来，等等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">convertToString</span><span class="hljs-params">(<span class="hljs-type">int</span> col)</span> &#123;<br>    <span class="hljs-type">int</span> res[<span class="hljs-number">10</span>];<br>    <span class="hljs-type">int</span> pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (col) &#123;<br>        res[pos++] = col % <span class="hljs-number">26</span>;<br>        col /= <span class="hljs-number">26</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; pos - <span class="hljs-number">1</span>; ++i) &#123;<br>        <span class="hljs-keyword">if</span> (res[i] &lt;= <span class="hljs-number">0</span>) &#123;<br>            res[i] += <span class="hljs-number">26</span>;<br>            --res[i + <span class="hljs-number">1</span>];<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 最高位特判一下，防止减成 0</span><br>    <span class="hljs-keyword">if</span> (res[pos - <span class="hljs-number">1</span>]) &#123;<br>        <span class="hljs-built_in">putchar</span>(res[pos - <span class="hljs-number">1</span>] + <span class="hljs-string">&#x27;A&#x27;</span> - <span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = pos - <span class="hljs-number">2</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        <span class="hljs-built_in">putchar</span>(res[i] + <span class="hljs-string">&#x27;A&#x27;</span> - <span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B/" class="category-chain-item">C 语言教程</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B/%E4%B9%A0%E9%A2%98%E8%A7%A3%E7%AD%94/" class="category-chain-item">习题解答</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C</a>
+      
+        <a href="/tags/Algorithm/">#Algorithm</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C 语言题目：绝妙的表格</div>
+      <div>https://swkfk.github.io/2023/01/18/C-语言题目：绝妙的表格/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kai_Ker</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/18/C-%E8%AF%AD%E8%A8%80%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%89%E5%90%88%E5%9B%9B/" title="C 语言题目：三合四">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C 语言题目：三合四</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/09/%E9%80%97%E5%8F%B7%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E7%AE%80%E5%8D%95%E8%BF%90%E7%94%A8/" title="逗号表达式的介绍与简单运用">
+                        <span class="hidden-mobile">逗号表达式的介绍与简单运用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

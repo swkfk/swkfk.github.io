@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/cf.png">
+  <link rel="icon" href="/img/cf.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="kai_Ker">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="头文件是怎样“包含”进来的的？在刚刚接触 C 语言时，同学们运行的第一个程序总是输出一个 Hello world!，代码如下： 12345#include &lt;stdio.h&gt;int main() &amp;#123;    printf(&quot;Hello world!\n&quot;);    return 0;&amp;#125; 也许你会知道，第一行叫“头文件”，但你知道这个头文件是如何被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="include 原理与多文件编程">
+<meta property="og:url" content="https://swkfk.github.io/2023/03/16/include-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%A4%9A%E6%96%87%E4%BB%B6%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="kai_Ker&#39;s blog">
+<meta property="og:description" content="头文件是怎样“包含”进来的的？在刚刚接触 C 语言时，同学们运行的第一个程序总是输出一个 Hello world!，代码如下： 12345#include &lt;stdio.h&gt;int main() &amp;#123;    printf(&quot;Hello world!\n&quot;);    return 0;&amp;#125; 也许你会知道，第一行叫“头文件”，但你知道这个头文件是如何被">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://swkfk.github.io/img/dev-new-proj.jpg">
+<meta property="og:image" content="https://swkfk.github.io/img/dev-add-file.png">
+<meta property="og:image" content="https://swkfk.github.io/img/dev-redef.png">
+<meta property="article:published_time" content="2023-03-16T00:27:51.000Z">
+<meta property="article:modified_time" content="2023-03-18T03:38:30.405Z">
+<meta property="article:author" content="kai_Ker">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://swkfk.github.io/img/dev-new-proj.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>include 原理与多文件编程 - kai_Ker&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"swkfk.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"§"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>kai_Ker&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="include 原理与多文件编程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-16 08:27" pubdate>
+          2023年3月16日 08:27
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">include 原理与多文件编程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="头文件是怎样“包含”进来的的？"><a href="#头文件是怎样“包含”进来的的？" class="headerlink" title="头文件是怎样“包含”进来的的？"></a>头文件是怎样“包含”进来的的？</h1><p>在刚刚接触 C 语言时，同学们运行的第一个程序总是输出一个 <code>Hello world!</code>，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello world!\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>也许你会知道，第一行叫“头文件”，但你知道这个头文件是如何被 <strong>包含</strong> 进来的吗，以及，我们为什么需要这么多头文件？</p>
+<hr>
+<p>在 C 语言中，以 <code>#</code> 开头的代码我们称为 <strong>预编译指令</strong>，是由 <strong>编译器</strong> 在正式编译 <strong>前</strong> 进行处理的。其中，<code>#include</code> 为包含指令，有两种写法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;header-file&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;header-file&quot;</span></span><br></code></pre></td></tr></table></figure>
+<p>以尖括号形式呈现的头文件仅适用于库文件中的头文件（大多数情况下，也许你可以通俗地理解为编译器提供的，或者是自带的头文件）。而以双引号形式呈现的头文件则 <strong>优先</strong> 在你写的源代码目录中寻找，找不到的话再去库文件中寻找<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="这意味着你可以自己写一个 stdio.h，然后以双引号形式包含进去，这样就起到了“瞒天过海”的目的，但是这样子搞，未免太叛逆了吧。">[1]</span></a></sup>。一般标准库头文件用尖括号，自己写的头文件用双引号，加以区分。</p>
+<hr>
+<p>编译器找到了头文件，那么是如何包含进去的呢？其实很简单，<code>Ctrl+C / Ctrl+V</code>。开个玩笑啦，当然真实情况也大体如此。来看一个“叛逆”的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> num =<br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;digit.h&quot;</span></span><br>        ;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, num);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>&quot;digit.h&quot;</code> 是自己写的一个头文件，内容如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">1024</span><br></code></pre></td></tr></table></figure>
+
+<p>这个程序当然是可以正常编译运行的，数字 <code>1024</code> 也可以被打印出来<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="这个例子还说明了，头文件未必需要始终处于代码的开头部分，甚至在函数体内都可以，当然实际情况下几乎不会这样用。">[2]</span></a></sup>。当然，需要注意的是，这个例子仅仅是个例子，真实编程中这样写是很不好的；同时，预编译指令需要 “独占一行”，也即不可以接在其他代码后面。</p>
+<hr>
+<p>那真实情况都是直接复制粘贴吗？其实不是。更准确地说，编译器是在 “递归” 地复制粘贴，如果头文件中还包含了其他的头文件，那么编译器会将这里面的内容全部复制过去，直到所有的 <code>#include</code> 都被干掉。</p>
+<h1 id="头文件的作用是什么？"><a href="#头文件的作用是什么？" class="headerlink" title="头文件的作用是什么？"></a>头文件的作用是什么？</h1><p>如果你学到了“函数”这一章节，你可能会知道一种将函数的“<strong>声明</strong>”与“<strong>实现</strong>”分离的写法，你可以将函数的声明放在代码的开头，将实现放在后面。当然，更加“工程”一点的做法是，将声明放在 <code>.h</code> 头文件中，将实现放在 <code>.c</code> 源代码文件中。这种也被称为 <strong>模块化</strong> 编程，一个配对的 <code>.h</code> 与 <code>.c</code> 文件组成一个模块。</p>
+<p>以 Dev-CPP 为例，为了实践上述想法，我们需要建立一个 “项目<sup id="fnref:3" class="footnote-ref"><a href="#fn:3" rel="footnote"><span class="hint--top hint--rounded" aria-label="“Project”，亦翻译为“工程”。其他 IDE 同理。">[3]</span></a></sup>”，并选择 “C 语言”、“控制台程序”。可以看到，IDE 为我们创建了一个 main.c 文件。</p>
+<p><img src="/img/dev-new-proj.jpg" srcset="/img/loading.gif" lazyload alt="Dev 中新建项目"></p>
+<p>接着，我们 <strong>在项目中</strong> 新建两个文件：utils.h 与 utils.c，如下图所示：</p>
+<p><img src="/img/dev-add-file.png" srcset="/img/loading.gif" lazyload alt="向项目中新建文件"></p>
+<p>并写入如下内容：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.h */</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.c */</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span> &#123;<br>    <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; size; ++i) &#123;<br>        res += arr[i];<br>    &#125;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接着，我们在 main.h 中包含这个头文件，并且调用这个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.h&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> &#123;<br>    <span class="hljs-type">int</span> arr[] = &#123;<span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, sum(arr, <span class="hljs-keyword">sizeof</span>(arr) / <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)));<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>事实上，编译器在编译这个项目的时候，首先会将将 utils.h 的内容“粘贴”到 main.c 的第 2 行（当然还有 stdio.h 的内容），然后进入“编译”环节，“编译”的对象仅仅是两个 .c 文件，并同时生成两个 .o 文件，也叫 <strong>目标文件</strong><sup id="fnref:4" class="footnote-ref"><a href="#fn:4" rel="footnote"><span class="hint--top hint--rounded" aria-label="目标代码是指源代码经过编译程序产生的，能被 CPU 直接识别并执行的二进制代码。">[4]</span></a></sup>。但这个时候，main.o 中并没有 <code>sum</code> 这个函数的“执行流程”，因为这个函数是在 utils.c 中实现的，自然会在 utils.o 这个目标文件中。所以编译器还有下一个任务，就是“链接”，将两个目标文件链接起来，让 main.o 里的 <code>sum</code> 函数能够找到正确的归宿。最终生成了一个可以正确执行的 main.exe 程序。</p>
+<p>在整个过程中，头文件起到的作用仅仅是告知编译器 <strong>函数的原型</strong>，包括参数类型、数量，返回值类型等等，因为编译器时时刻刻总是只能处理，具体的函数实现是置于 .c 文件中的。</p>
+<blockquote>
+<p>注意，通常对于一个配对的源代码文件与头文件，需要在源代码文件中包含该头文件，以便于编译器更好地检查冲突。</p>
+</blockquote>
+<h1 id="包含头文件的正确方法"><a href="#包含头文件的正确方法" class="headerlink" title="包含头文件的正确方法"></a>包含头文件的正确方法</h1><h2 id="避免重复定义"><a href="#避免重复定义" class="headerlink" title="避免重复定义"></a>避免重复定义</h2><p>显然，当我们的程序复杂起来的时候，头文件、源代码文件的数量肯定也会多起来，其包含关系可能也会变得异常复杂，这个时候，就会出现“<strong>重复定义</strong>”的风险。接着刚才的例子，假设我们有这样的一个包含关系：</p>
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers tags lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile&gt;&lt;diagram id=\&quot;il3yRFXszgI8L7HcCFZa\&quot; name=\&quot;Page-1\&quot;&gt;&lt;mxGraphModel dx=\&quot;566\&quot; dy=\&quot;587\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;1169\&quot; pageHeight=\&quot;827\&quot; math=\&quot;0\&quot; shadow=\&quot;0\&quot;&gt;&lt;root&gt;&lt;mxCell id=\&quot;0\&quot;/&gt;&lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot;/&gt;&lt;mxCell id=\&quot;18\&quot; value=\&quot;\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; vertex=\&quot;1\&quot; parent=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;90\&quot; y=\&quot;60\&quot; width=\&quot;400\&quot; height=\&quot;290\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;7\&quot; style=\&quot;edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; source=\&quot;2\&quot; target=\&quot;4\&quot; edge=\&quot;1\&quot;&gt;&lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;9\&quot; style=\&quot;edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; source=\&quot;2\&quot; target=\&quot;6\&quot; edge=\&quot;1\&quot;&gt;&lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;2\&quot; value=\&quot;main.c\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;230\&quot; y=\&quot;270\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;16\&quot; style=\&quot;edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;3\&quot; target=\&quot;4\&quot;&gt;&lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;3\&quot; value=\&quot;utils.c\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;110\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;4\&quot; value=\&quot;utils.h\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;110\&quot; y=\&quot;160\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;17\&quot; style=\&quot;edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;5\&quot; target=\&quot;6\&quot;&gt;&lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;5\&quot; value=\&quot;array.c\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;350\&quot; y=\&quot;80\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;13\&quot; style=\&quot;edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; source=\&quot;6\&quot; target=\&quot;4\&quot; edge=\&quot;1\&quot;&gt;&lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=\&quot;6\&quot; value=\&quot;array.h\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=15;\&quot; parent=\&quot;1\&quot; vertex=\&quot;1\&quot;&gt;&lt;mxGeometry x=\&quot;350\&quot; y=\&quot;160\&quot; width=\&quot;120\&quot; height=\&quot;60\&quot; as=\&quot;geometry\&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div>
+<script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+
+<p>main.c 中包含了 array.h 数组模块与 utils.h 工具模块，而在 array.h 中又包含了 utils.h 工具模块，考虑到编译器的“复制粘贴”操作，utils.h 的内容在 main.c 中出现了两次。如果很不幸，utils.h 中定义了结构体，这样会导致这样的编译错误：</p>
+<p><img src="/img/dev-redef.png" srcset="/img/loading.gif" lazyload alt="重复定义的报错"></p>
+<p>但头文件的重复包含似乎是不可避免的，因为这样符合项目的逻辑。于是我们想要一种方法，让同一个头文件只“起效”一次，可以这样操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.h */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> __UTILS_H__</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __UTILS_H__</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span>;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Point_t</span> &#123;</span><br>    <span class="hljs-type">int</span> x;<br>    <span class="hljs-type">int</span> y;<br>&#125;; <br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这里面有几个预编译指令，<code>#ifndef</code>，全称为 if not defined，它与 <code>endif</code> 配对，这样子一看，就很好理解啦。对于宏的命名方法，要做到不同文件不重名，并且符合标识符的命名规则。</p>
+<blockquote>
+<p>此外，部分编译器还可以通过在头文件开头加上 <code>#pragma once</code> 来达到类似的效果，但这并不属于 C 标准的内容。</p>
+</blockquote>
+<h2 id="找到全局变量"><a href="#找到全局变量" class="headerlink" title="找到全局变量"></a>找到全局变量</h2><p>有时候，我们在一个 <strong>源代码文件</strong> 中定义了一些全局变量，我们想要在其他文件中 <strong>一起</strong> 使用，这个时候，可以在 <strong>头文件</strong> 中使用 <code>extern</code> 声明这个变量。如此一来，我们可以在任何包含该头文件的源代码文件中使用这个全局变量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.h */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> __UTILS_H__</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __UTILS_H__</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show_num</span><span class="hljs-params">()</span>;<br><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> g_num;  <span class="hljs-comment">// 在这里只要声明一下有就行了。数组同理，不能再初始化。 </span><br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.c */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.h&quot;</span></span><br><br><span class="hljs-type">int</span> g_num = <span class="hljs-number">2</span>;  <span class="hljs-comment">// 在这里是可以初始化的 </span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show_num</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, g_num); <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* main.c */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.h&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> &#123;<br>    show_num();<br>    g_num = <span class="hljs-number">1024</span>;  <span class="hljs-comment">// 可以修改与读取</span><br>    show_num();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>main.c 中包含了 utils.h，其中有这样一句 <code>extern int g_num;</code>，它告诉编译器，“我在外面有一个叫 <code>g_num</code> 的 <code>int</code> 型的变量”，这样就可以起到跨文件“共享”的目的了。</p>
+<p>同时，上述例子中，<code>extern</code>被置于头文件中，并在 main.c 的全局作用域被使用，因此，<code>g_num</code> 在 main.c 中也具有全局作用域，如果将这一句话，放在函数中，那么它就只在这个函数中起作用了，例如下面的例子会生成一个编译错误。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* main.c */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.h&quot;</span>  <span class="hljs-comment">// 该头文件中不含有 extern 语句</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show_in_main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// [Error] &#x27;g_num&#x27; undeclared (first use in this function)</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, g_num);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> &#123;<br>    <span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> g_num;  <span class="hljs-comment">// 在这里</span><br>    show_num();<br>    g_num = <span class="hljs-number">1024</span>;<br>    show_num();<br>    show_in_main();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="外部静态变量"><a href="#外部静态变量" class="headerlink" title="外部静态变量"></a>外部静态变量</h2><p>这里的“外部”并不是 <code>extern</code> 的那个外部，而是针对函数体而言的，将一个全局变量声明为 <code>static</code>，它的作用域就被限定在了 <strong>单个文件</strong> 之中，就不可以再用 <code>extern</code> 声明了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.c */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;utils.h&quot;</span></span><br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> g_num = <span class="hljs-number">2</span>;  <span class="hljs-comment">// 全局的 static，对外部文件“隐身” </span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show_num</span><span class="hljs-params">()</span> &#123;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, g_num); <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* utils.h */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> __UTILS_H__</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __UTILS_H__</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show_num</span><span class="hljs-params">()</span>;<br><br><span class="hljs-comment">// [Error] static declaration of &#x27;g_num&#x27; follows non-static declaration</span><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> g_num;<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>这意味着你可以自己写一个 stdio.h，然后以双引号形式包含进去，这样就起到了“瞒天过海”的目的，但是这样子搞，未免太叛逆了吧。
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span>这个例子还说明了，头文件未必需要始终处于代码的开头部分，甚至在函数体内都可以，当然实际情况下几乎不会这样用。
+<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:3" class="footnote-text"><span>“Project”，亦翻译为“工程”。其他 IDE 同理。
+<a href="#fnref:3" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:4" class="footnote-text"><span>目标代码是指源代码经过编译程序产生的，能被 CPU 直接识别并执行的二进制代码。
+<a href="#fnref:4" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B/" class="category-chain-item">C 语言教程</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C-%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B/%E8%AF%AD%E6%B3%95%E8%AE%B2%E8%A7%A3/" class="category-chain-item">语法讲解</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>include 原理与多文件编程</div>
+      <div>https://swkfk.github.io/2023/03/16/include-原理与多文件编程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>kai_Ker</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/18/PyQt6-%E6%8A%80%E6%9C%AF%E9%9A%BE%E7%82%B9%E7%AC%94%E8%AE%B0/" title="PyQt6 技术难点笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PyQt6 技术难点笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/18/C-%E8%AF%AD%E8%A8%80%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%89%E5%90%88%E5%9B%9B/" title="C 语言题目：三合四">
+                        <span class="hidden-mobile">C 语言题目：三合四</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
