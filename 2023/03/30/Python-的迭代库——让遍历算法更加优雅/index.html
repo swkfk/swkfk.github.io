@@ -16,15 +16,15 @@
   <meta name="author" content="kai_Ker">
   <meta name="keywords" content="">
   
-    <meta name="description" content="你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 itertools 库帮你排忧纾难！">
+    <meta name="description" content="【学学 Python 吧，感受随心所欲的优雅】你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 itertools 库帮你排忧纾难！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python 的迭代库——让遍历算法更加优雅">
 <meta property="og:url" content="https://swkfk.github.io/2023/03/30/Python-%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%BA%93%E2%80%94%E2%80%94%E8%AE%A9%E9%81%8D%E5%8E%86%E7%AE%97%E6%B3%95%E6%9B%B4%E5%8A%A0%E4%BC%98%E9%9B%85/index.html">
 <meta property="og:site_name" content="kai_Ker&#39;s blog">
-<meta property="og:description" content="你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 itertools 库帮你排忧纾难！">
+<meta property="og:description" content="【学学 Python 吧，感受随心所欲的优雅】你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 itertools 库帮你排忧纾难！">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-30T12:04:41.000Z">
-<meta property="article:modified_time" content="2023-03-31T11:06:16.794Z">
+<meta property="article:modified_time" content="2023-03-31T16:55:34.915Z">
 <meta property="article:author" content="kai_Ker">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="itertools">
@@ -278,7 +278,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.6k 字
+          10k 字
         
       </span>
     
@@ -289,7 +289,7 @@
         
         
         
-          56 分钟
+          84 分钟
         
       </span>
     
@@ -340,10 +340,10 @@
             
               <div class="markdown-body">
                 
-                <p>你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 <code>itertools</code> 库帮你排忧纾难！</p>
+                <p>【学学 Python 吧，感受随心所欲的优雅】你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 <code>itertools</code> 库帮你排忧纾难！</p>
 <span id="more"></span>
 
-<h1 id="索引-x2F-Index"><a href="#索引-x2F-Index" class="headerlink" title="索引 &#x2F; Index"></a>索引 &#x2F; Index</h1><p>索引只列出了用得比较多的，使用较少或者难以总结的，在正文中也有列出。</p>
+<h1 id="索引-x2F-Index"><a href="#索引-x2F-Index" class="headerlink" title="索引 &#x2F; Index"></a>索引 &#x2F; Index</h1><p>索引只列出了用得比较多的 <strong>部分函数</strong>，其余使用较少或者难以总结的，在正文中均有列出，可以参看 <strong>右方目录</strong>。</p>
 <table>
 <thead>
 <tr>
@@ -398,41 +398,47 @@
 <tr>
 <td align="center">⭐⭐</td>
 <td align="center">挑选，使用给定函数判断</td>
-<td align="center"><a href="#%E6%8C%89%E9%9C%80%E9%80%89%E6%8B%A9%EF%BC%9Afilterfalse">filterfalse</a></td>
+<td align="center"><a href="#%E6%8C%89%E9%9C%80%E9%80%89%E6%8B%A9%EF%BC%9Afilterfalse-predicate-iterable">filterfalse</a></td>
 <td align="center"></td>
 </tr>
 <tr>
 <td align="center">⭐</td>
 <td align="center">挑选，使用真值列表</td>
-<td align="center"><a href="#%E6%8C%91%E9%80%89%E5%8E%8B%E7%BC%A9%EF%BC%9Acompress">compress</a></td>
+<td align="center"><a href="#%E6%8C%91%E9%80%89%E5%8E%8B%E7%BC%A9%EF%BC%9Acompress-data-selectors">compress</a></td>
 <td align="center"></td>
 </tr>
 <tr>
 <td align="center">⭐</td>
 <td align="center">累加，从头开始累加</td>
-<td align="center"><a href="#%E7%B4%AF%E5%8A%A0%EF%BC%9Aaccumulate">accumulate</a></td>
+<td align="center"><a href="#%E7%B4%AF%E5%8A%A0%EF%BC%9Aaccumulate-p-func">accumulate</a></td>
 <td align="center"><a href="#%E8%AE%A1%E7%AE%97%E9%98%B6%E4%B9%98%E5%92%8C">计算阶乘和</a></td>
 </tr>
 <tr>
 <td align="center"></td>
 <td align="center">邻接配对，和邻居绑一起</td>
-<td align="center"><a href="#%E9%82%BB%E6%8E%A5%E9%85%8D%E5%AF%B9%EF%BC%9Apairwise">pairwise</a></td>
+<td align="center"><a href="#%E9%82%BB%E6%8E%A5%E9%85%8D%E5%AF%B9%EF%BC%9Apairwise-iterable-%E3%80%90Python-geqslant-3-10-%E3%80%91">pairwise</a></td>
 <td align="center"></td>
 </tr>
 <tr>
 <td align="center"></td>
+<td align="center">邻接分组，连续的同组的</td>
+<td align="center"><a href="#%E9%82%BB%E6%8E%A5%E5%88%86%E7%BB%84%EF%BC%9Agroupby-iterable-key">groupby</a></td>
+<td align="center"><a href="#%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%90%88%E6%95%B0">连续的合数</a></td>
+</tr>
+<tr>
+<td align="center"></td>
 <td align="center">丢弃开头，直到条件成立</td>
-<td align="center"><a href="#%E8%88%8D%E5%BC%83%E5%BC%80%E5%A4%B4%EF%BC%9Adropwhile">dropwhile</a></td>
+<td align="center"><a href="#%E8%88%8D%E5%BC%83%E5%BC%80%E5%A4%B4%EF%BC%9Adropwhile-predicate-iterable">dropwhile</a></td>
 <td align="center"></td>
 </tr>
 <tr>
 <td align="center"></td>
 <td align="center">只要开头，直到条件成立</td>
-<td align="center"><a href="#%E5%8F%AA%E8%A6%81%E5%BC%80%E5%A4%B4%EF%BC%9Atakewhile">takewhile</a></td>
+<td align="center"><a href="#%E5%8F%AA%E8%A6%81%E5%BC%80%E5%A4%B4%EF%BC%9Atakewhile-predicate-iterable">takewhile</a></td>
 <td align="center"></td>
 </tr>
 <tr>
-<td align="center">⭐⭐</td>
+<td align="center"></td>
 <td align="center">切片，但与列表切片不一样</td>
 <td align="center"><a href="#%E5%88%87%E7%89%87%EF%BC%9Aislice">islice</a></td>
 <td align="center"></td>
@@ -523,11 +529,82 @@
 
 <p>每次会将之前的 “累加和” 乘以二再加上当前的元素。</p>
 <p>在 Python 3.8 及以后，还可以以键值对的形式显式指定 <code>initial</code> 参数，表示初始量，否则初始量为 <strong>第一个元素</strong>。</p>
+<blockquote>
+<p>注意这里，是传递 <strong>一个函数</strong> 进去，就不能加小括号啦，不然就相当于调用这个函数了。</p>
+</blockquote>
 <h2 id="连接：chain-iterables"><a href="#连接：chain-iterables" class="headerlink" title="连接：chain(*iterables)"></a>连接：chain(*iterables)</h2><p>将所有的可迭代对象按顺序连起来，<strong>逐项遍历</strong>。</p>
-<h2 id="同样是连接：chain-from-iterable"><a href="#同样是连接：chain-from-iterable" class="headerlink" title="同样是连接：chain.from_iterable()"></a>同样是连接：chain.from_iterable()</h2><h2 id="挑选压缩：compress-data-selectors"><a href="#挑选压缩：compress-data-selectors" class="headerlink" title="挑选压缩：compress(data, selectors)"></a>挑选压缩：compress(data, selectors)</h2><p>给它两个可迭代对象，一个是数据，一个用来标识当前位的数据是否选用，比如：</p>
+<h2 id="同样是连接：chain-from-iterable-iterable"><a href="#同样是连接：chain-from-iterable-iterable" class="headerlink" title="同样是连接：chain.from_iterable(iterable)"></a>同样是连接：chain.from_iterable(iterable)</h2><p>其实是和上一个差不多了，但是会先提取一层元素，再连接里面的元素：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">chain.from_iterable([<span class="hljs-string">&#x27;ABC&#x27;</span>, <span class="hljs-string">&#x27;DEF&#x27;</span>])  --&gt; A B C D E F<br></code></pre></td></tr></table></figure>
+
+<h2 id="挑选压缩：compress-data-selectors"><a href="#挑选压缩：compress-data-selectors" class="headerlink" title="挑选压缩：compress(data, selectors)"></a>挑选压缩：compress(data, selectors)</h2><p>给它两个可迭代对象，一个是数据，一个用来标识当前位的数据是否选用。</p>
 <p><code>compress([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;], [1, 0, 0, 1, 1]) --&gt; [&#39;A&#39;, &#39;D&#39;, &#39;E&#39;]</code></p>
 <p>后一个里面的元素会被逐项计算，结果的真值用来决定对应位置的元素是否选用。</p>
-<h2 id="舍弃开头：dropwhile"><a href="#舍弃开头：dropwhile" class="headerlink" title="舍弃开头：dropwhile()"></a>舍弃开头：dropwhile()</h2><h2 id="只要开头：takewhile"><a href="#只要开头：takewhile" class="headerlink" title="只要开头：takewhile()"></a>只要开头：takewhile()</h2><h2 id="按需选择：filterfalse"><a href="#按需选择：filterfalse" class="headerlink" title="按需选择：filterfalse()"></a>按需选择：filterfalse()</h2><h2 id="groupby"><a href="#groupby" class="headerlink" title="groupby()"></a>groupby()</h2><h2 id="切片：islice"><a href="#切片：islice" class="headerlink" title="切片：islice()"></a>切片：islice()</h2><h2 id="邻接配对：pairwise"><a href="#邻接配对：pairwise" class="headerlink" title="邻接配对：pairwise()"></a>邻接配对：pairwise()</h2><h2 id="高级-map：starmap"><a href="#高级-map：starmap" class="headerlink" title="高级 map：starmap()"></a>高级 map：starmap()</h2><h2 id="tee"><a href="#tee" class="headerlink" title="tee()"></a>tee()</h2><h2 id="配对合并：zip-longest"><a href="#配对合并：zip-longest" class="headerlink" title="配对合并：zip_longest()"></a>配对合并：zip_longest()</h2><h1 id="例题与应用"><a href="#例题与应用" class="headerlink" title="例题与应用"></a>例题与应用</h1><h2 id="打印全排列"><a href="#打印全排列" class="headerlink" title="打印全排列"></a>打印全排列</h2><p>编写一个函数，给定正整数 <code>n</code>（$1 \leqslant n \leqslant 15$），打印输出 $1 \sim n$ 的全排列。</p>
+<h2 id="按需选择：filterfalse-predicate-iterable"><a href="#按需选择：filterfalse-predicate-iterable" class="headerlink" title="按需选择：filterfalse(predicate, iterable)"></a>按需选择：filterfalse(predicate, iterable)</h2><p>给定一个函数 <code>predicate</code>，接收一个参数，返回一个真值。对于可迭代对象 <code>iterable</code> 中的每一个元素，会将其传入 <code>predicate</code> 函数，若得到的 <strong>真值为 <code>False</code>，则选用该元素</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">odd</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">return</span> x % <span class="hljs-number">2</span> == <span class="hljs-number">1</span><br><br><span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> itertools.filterfalse(odd, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>, <span class="hljs-number">9</span>]):<br>    <span class="hljs-built_in">print</span>(num)<br></code></pre></td></tr></table></figure>
+
+<p>结果如下，所有的偶数被调了出来：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">2<br>6<br>4<br></code></pre></td></tr></table></figure>
+
+<h2 id="舍弃开头：dropwhile-predicate-iterable"><a href="#舍弃开头：dropwhile-predicate-iterable" class="headerlink" title="舍弃开头：dropwhile(predicate, iterable)"></a>舍弃开头：dropwhile(predicate, iterable)</h2><p>给定一个函数 <code>predicate</code>，接收一个参数，返回一个真值。对于可迭代对象 <code>iterable</code> 中的每一个元素，会 <strong>从头开始</strong> 将其传入 <code>predicate</code> 函数一一校验，返回为 <code>True</code> 时 <strong>丢弃</strong>，直到某一个元素的结果为 <code>False</code>，保留 <strong>这个元素及之后所有元素</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">small</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">return</span> x &lt; <span class="hljs-number">5</span><br><br><span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> itertools.dropwhile(small, [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>]):<br>    <span class="hljs-built_in">print</span>(num)<br></code></pre></td></tr></table></figure>
+
+<p>结果如下，开头的 <code>[1, 4]</code> 被丢弃，直到 <code>6 &lt; 5</code> 不成立。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">6<br>4<br>1<br></code></pre></td></tr></table></figure>
+
+<h2 id="只要开头：takewhile-predicate-iterable"><a href="#只要开头：takewhile-predicate-iterable" class="headerlink" title="只要开头：takewhile(predicate, iterable)"></a>只要开头：takewhile(predicate, iterable)</h2><p>给定一个函数 <code>predicate</code>，接收一个参数，返回一个真值。对于可迭代对象 <code>iterable</code> 中的每一个元素，会 <strong>从头开始</strong> 将其传入 <code>predicate</code> 函数一一校验，返回为 <code>True</code> 时 <strong>取用</strong>，直到某一个元素的结果为 <code>False</code>，<strong>直接丢弃</strong> 这个元素及 <strong>之后所有元素</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">small</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">return</span> x &lt; <span class="hljs-number">5</span><br><br><span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> itertools.takewhile(small, [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>]):<br>    <span class="hljs-built_in">print</span>(num)<br></code></pre></td></tr></table></figure>
+
+<p>结果如下，开头的 <code>[1, 4]</code> 被选用，直到 <code>6 &lt; 5</code> 不成立，直接丢弃元素 <code>6</code> 及后面所有元素。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">1<br>4<br></code></pre></td></tr></table></figure>
+
+<h2 id="切片：islice"><a href="#切片：islice" class="headerlink" title="切片：islice()"></a>切片：islice()</h2><p>有两种形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">itertools.islice(iterable, stop)<br>itertools.islice(iterable, start, stop[, step])<br></code></pre></td></tr></table></figure>
+
+<p>除了不能使用负值，同正常的列表切片一致。若 <code>stop</code> 被指定为 <code>None</code>，则会一直到结尾。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">islice(<span class="hljs-string">&#x27;ABCDEFG&#x27;</span>, <span class="hljs-number">2</span>)           <span class="hljs-comment">#  --&gt; A B</span><br>islice(<span class="hljs-string">&#x27;ABCDEFG&#x27;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>)        <span class="hljs-comment">#  --&gt; C D</span><br>islice(<span class="hljs-string">&#x27;ABCDEFG&#x27;</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">None</span>)     <span class="hljs-comment">#  --&gt; C D E F G</span><br>islice(<span class="hljs-string">&#x27;ABCDEFG&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">None</span>, <span class="hljs-number">2</span>)  <span class="hljs-comment">#  --&gt; A C E G</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="邻接配对：pairwise-iterable-【Python-geqslant-3-10-】"><a href="#邻接配对：pairwise-iterable-【Python-geqslant-3-10-】" class="headerlink" title="邻接配对：pairwise(iterable) 【Python $\geqslant 3.10$】"></a>邻接配对：pairwise(iterable) 【Python $\geqslant 3.10$】</h2><p>两个两个捆起来返回，当输入的可迭代对象元素数少于两个时，将为空。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">for</span> pair <span class="hljs-keyword">in</span> itertools.pairwise(<span class="hljs-string">&quot;ABCDEF&quot;</span>):<br>    <span class="hljs-built_in">print</span>(pair)<br></code></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">(&#x27;A&#x27;, &#x27;B&#x27;)<br>(&#x27;B&#x27;, &#x27;C&#x27;)<br>(&#x27;C&#x27;, &#x27;D&#x27;)<br>(&#x27;D&#x27;, &#x27;E&#x27;)<br>(&#x27;E&#x27;, &#x27;F&#x27;)<br></code></pre></td></tr></table></figure>
+
+<h2 id="邻接分组：groupby-iterable-key"><a href="#邻接分组：groupby-iterable-key" class="headerlink" title="邻接分组：groupby(iterable[, key])"></a>邻接分组：groupby(iterable[, key])</h2><p><code>groupby</code> 可以将 <strong>相邻</strong> 的、<strong>相同</strong> 的元素给挑选出来，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><span class="hljs-keyword">for</span> k, g <span class="hljs-keyword">in</span> itertools.groupby(<span class="hljs-string">&quot;AAAABBBCCDAABBB&quot;</span>):<br>    <span class="hljs-built_in">print</span>(k, <span class="hljs-built_in">list</span>(g))<br></code></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">A [&#x27;A&#x27;, &#x27;A&#x27;, &#x27;A&#x27;, &#x27;A&#x27;]<br>B [&#x27;B&#x27;, &#x27;B&#x27;, &#x27;B&#x27;]<br>C [&#x27;C&#x27;, &#x27;C&#x27;]<br>D [&#x27;D&#x27;]<br>A [&#x27;A&#x27;, &#x27;A&#x27;]<br>B [&#x27;B&#x27;, &#x27;B&#x27;, &#x27;B&#x27;]<br></code></pre></td></tr></table></figure>
+
+<p>调用 <code>groupby</code> 会得到两样东西，第一个为 ”键“（key），第二个为一个分组对象，转化成列表便如上所示。它是将相邻的东西给挑出来，</p>
+<p><code>key</code> 参数接受一个函数，这个函数用来根据元素算出一个 ”键“，作为分组的依据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">odd</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">return</span> x % <span class="hljs-number">2</span> == <span class="hljs-number">1</span><br><br><span class="hljs-keyword">for</span> k, g <span class="hljs-keyword">in</span> itertools.groupby([<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>], odd):<br>    <span class="hljs-built_in">print</span>(k, <span class="hljs-built_in">list</span>(g))<br></code></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">False [2]<br>True [3, 5, 1]<br>False [6, 4, 2]<br>True [3, 9]<br></code></pre></td></tr></table></figure>
+
+<p>根据文档的建议，你可以使用相同的 <code>key</code> 对传入数据先进行排序，当然还是要看具体的需求啦。</p>
+<h2 id="”复制“-迭代器：tee-iterable-n-x3D-2"><a href="#”复制“-迭代器：tee-iterable-n-x3D-2" class="headerlink" title="”复制“ 迭代器：tee(iterable[, n&#x3D;2])"></a>”复制“ 迭代器：tee(iterable[, n&#x3D;2])</h2><p>将给定的可迭代对象复制 <code>n</code> 份。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br>it1, it2, it3 = itertools.tee([<span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>], <span class="hljs-number">3</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(it1))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(it2))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(it3))<br></code></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">[3, 1, 4, 1, 5]<br>[3, 1, 4, 1, 5]<br>[3, 1, 4, 1, 5]<br></code></pre></td></tr></table></figure>
+
+<h2 id="高级-map：starmap-function-iterable"><a href="#高级-map：starmap-function-iterable" class="headerlink" title="高级 map：starmap(function, iterable)"></a>高级 map：starmap(function, iterable)</h2><p>类似与原版的 <code>map</code>，但是会给 <code>iterable</code> <strong>中的</strong> 元素 <strong>解一次包</strong>。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">starmap(<span class="hljs-built_in">pow</span>, [(<span class="hljs-number">2</span>, <span class="hljs-number">5</span>), (<span class="hljs-number">3</span>, <span class="hljs-number">2</span>), (<span class="hljs-number">10</span>, <span class="hljs-number">3</span>)]) --&gt; <span class="hljs-number">32</span> <span class="hljs-number">9</span> <span class="hljs-number">1000</span><br></code></pre></td></tr></table></figure>
+
+<p>就相当于：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">pow</span>(*(<span class="hljs-number">2</span>, <span class="hljs-number">5</span>)), <span class="hljs-built_in">pow</span>(*(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)), <span class="hljs-built_in">pow</span>(*(<span class="hljs-number">10</span>, <span class="hljs-number">3</span>))<br></code></pre></td></tr></table></figure>
+
+<p>也即：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">5</span>), <span class="hljs-built_in">pow</span>(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">pow</span>(<span class="hljs-number">10</span>, <span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="配对合并：zip-longest-iterables-fillvalue-x3D-None"><a href="#配对合并：zip-longest-iterables-fillvalue-x3D-None" class="headerlink" title="配对合并：zip_longest(*iterables[, fillvalue&#x3D;None])"></a>配对合并：zip_longest(*iterables[, fillvalue&#x3D;None])</h2><p>类似于原版的 <code>zip</code>，但是组合会一直进行到最长的为止。缺失的元素用 <code>fillvalue</code> 补齐。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(<span class="hljs-built_in">zip</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(itertools.zip_longest([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])))<br></code></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">[(1, 3), (2, 4)]<br>[(1, 3), (2, 4), (None, 5)]<br></code></pre></td></tr></table></figure>
+
+<h1 id="例题与应用"><a href="#例题与应用" class="headerlink" title="例题与应用"></a>例题与应用</h1><h2 id="打印全排列"><a href="#打印全排列" class="headerlink" title="打印全排列"></a>打印全排列</h2><p>编写一个函数，给定正整数 <code>n</code>（$1 \leqslant n \leqslant 15$），打印输出 $1 \sim n$ 的全排列。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">full_perm</span>(<span class="hljs-params">n</span>):<br>    <span class="hljs-keyword">for</span> tup <span class="hljs-keyword">in</span> itertools.permutations(<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>)):<br>        <span class="hljs-built_in">print</span>(*tup)<br><br>full_perm(<span class="hljs-number">5</span>)<br></code></pre></td></tr></table></figure>
 
 <ul>
@@ -577,6 +654,20 @@
 <p>上述程序运行结果为：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">153<br></code></pre></td></tr></table></figure>
 
+<h2 id="连续的合数"><a href="#连续的合数" class="headerlink" title="连续的合数"></a>连续的合数</h2><p>编写一个函数，统计 $2 \sim n$ 中，最长出现了多少个连续的合数，其中，$10 \leqslant n \leqslant 100000$。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> itertools<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">prime</span>(<span class="hljs-params">x</span>):<br>    i = <span class="hljs-number">2</span><br>    <span class="hljs-keyword">while</span> i * i &lt;= x:<br>        <span class="hljs-keyword">if</span> x % i == <span class="hljs-number">0</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br>        i += <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">straight_composite</span>(<span class="hljs-params">n</span>):<br>    lst = []<br>    <span class="hljs-keyword">for</span> _, g <span class="hljs-keyword">in</span> itertools.groupby(<span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>), prime):<br>        lst.append(<span class="hljs-built_in">len</span>(<span class="hljs-built_in">list</span>(g)))<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">max</span>(lst)<br><br><span class="hljs-built_in">print</span>(straight_composite(<span class="hljs-number">27</span>))<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>考虑到连续的素数只有 2 和 3，所以没有对素数与合数加以区分，连续的合数会被自动分组，单个的素数也自成一组，然后求出每个归组列表的长度，存入一个新的列表，然后直接求其最大值。</p>
+</li>
+<li><p>注意到，<code>for</code> 循环中出现了一个 <code>_</code>，这个也是一个合法的变量名，并且有特殊的 <strong>语义</strong><sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="什么是 ”语义“，按照我的理解，就是这段代码想要表达的意思，与语法无关。Python 中有很多写法都能达到相同的效果，但它们可能各有各的语义，这个需要去感受一下。">[1]</span></a></sup>，表示这个变量我用不到，就是占个位置。</p>
+</li>
+</ul>
+<p>上述程序运行结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">4<br></code></pre></td></tr></table></figure>
+
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>什么是 ”语义“，按照我的理解，就是这段代码想要表达的意思，与语法无关。Python 中有很多写法都能达到相同的效果，但它们可能各有各的语义，这个需要去感受一下。
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
                 
               </div>
             
@@ -599,7 +690,7 @@
   
     <span>></span>
     
-  <a href="/categories/Python-%E6%95%99%E7%A8%8B/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="category-chain-item">入门教程</a>
+  <a href="/categories/Python-%E6%95%99%E7%A8%8B/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="category-chain-item">实用工具</a>
   
   
 
