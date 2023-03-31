@@ -24,7 +24,7 @@
 <meta property="og:description" content="【学学 Python 吧，感受随心所欲的优雅】你是否被层层叠叠的循环搞得焦头烂额？你是否想用全排列但是不想写递归？让 itertools 库帮你排忧纾难！">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-30T12:04:41.000Z">
-<meta property="article:modified_time" content="2023-03-31T16:55:34.915Z">
+<meta property="article:modified_time" content="2023-03-31T17:00:39.255Z">
 <meta property="article:author" content="kai_Ker">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="itertools">
@@ -532,7 +532,9 @@
 <blockquote>
 <p>注意这里，是传递 <strong>一个函数</strong> 进去，就不能加小括号啦，不然就相当于调用这个函数了。</p>
 </blockquote>
-<h2 id="连接：chain-iterables"><a href="#连接：chain-iterables" class="headerlink" title="连接：chain(*iterables)"></a>连接：chain(*iterables)</h2><p>将所有的可迭代对象按顺序连起来，<strong>逐项遍历</strong>。</p>
+<h2 id="连接：chain-iterables"><a href="#连接：chain-iterables" class="headerlink" title="连接：chain(*iterables)"></a>连接：chain(*iterables)</h2><p>将所有的可迭代对象按顺序连起来，<strong>逐项遍历</strong>，里面的元素会被提取出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">chain(<span class="hljs-string">&#x27;ABC&#x27;</span>, <span class="hljs-string">&#x27;DEF&#x27;</span>) --&gt; A B C D E F<br></code></pre></td></tr></table></figure>
+
 <h2 id="同样是连接：chain-from-iterable-iterable"><a href="#同样是连接：chain-from-iterable-iterable" class="headerlink" title="同样是连接：chain.from_iterable(iterable)"></a>同样是连接：chain.from_iterable(iterable)</h2><p>其实是和上一个差不多了，但是会先提取一层元素，再连接里面的元素：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">chain.from_iterable([<span class="hljs-string">&#x27;ABC&#x27;</span>, <span class="hljs-string">&#x27;DEF&#x27;</span>])  --&gt; A B C D E F<br></code></pre></td></tr></table></figure>
 
