@@ -16,15 +16,15 @@
   <meta name="author" content="kai_Ker">
   <meta name="keywords" content="">
   
-    <meta name="description" content="【TBC】scanf() 有很多鲜知的知识，用好了可以很方便 ~">
+    <meta name="description" content="scanf() 有很多鲜知的知识，用好了可以很方便 ~">
 <meta property="og:type" content="article">
 <meta property="og:title" content="scanf() 中的跳过与字符匹配">
 <meta property="og:url" content="https://swkfk.github.io/2023/04/05/scanf-%E4%B8%AD%E7%9A%84%E8%B7%B3%E8%BF%87%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/index.html">
 <meta property="og:site_name" content="kai_Ker&#39;s blog">
-<meta property="og:description" content="【TBC】scanf() 有很多鲜知的知识，用好了可以很方便 ~">
+<meta property="og:description" content="scanf() 有很多鲜知的知识，用好了可以很方便 ~">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-05T14:21:35.000Z">
-<meta property="article:modified_time" content="2023-04-06T00:53:29.959Z">
+<meta property="article:modified_time" content="2023-04-06T02:18:47.657Z">
 <meta property="article:author" content="kai_Ker">
 <meta property="article:tag" content="C">
 <meta name="twitter:card" content="summary_large_image">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k 字
+          4.1k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          18 分钟
+          34 分钟
         
       </span>
     
@@ -324,8 +324,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="scanf-的-“转换指令”-的组成"><a href="#scanf-的-“转换指令”-的组成" class="headerlink" title="scanf() 的 “转换指令” 的组成"></a>scanf() 的 “转换指令” 的组成</h1><blockquote>
-<p>这一部分主要是标准的翻译与诠释，而且和文字标题中的两个关键字关系不大，只想知道怎么用的同学可以忽略（）</p>
+                <h1 id="标准怎么说：scanf-的-“转换指令”-及其组成"><a href="#标准怎么说：scanf-的-“转换指令”-及其组成" class="headerlink" title="标准怎么说：scanf() 的 “转换指令” 及其组成"></a>标准怎么说：scanf() 的 “转换指令” 及其组成</h1><blockquote>
+<p>这一部分主要是对标准的翻译与诠释，只想知道怎么用的同学可以忽略（）</p>
 </blockquote>
 <p><code>scanf()</code> 的第一个参数由零个或多个转换指令（directives）组成，而每个指令又为一个或多个空白字符、既不是 <code>%</code> 也不是空白字符的原始字符串，或者一个 <strong>转换指示符（conversion specification）</strong>。</p>
 <blockquote>
@@ -368,7 +368,7 @@
 <p>当遇到其他字符（包括空白符）会 <strong>结束匹配</strong>，并将剩下的 <strong>留在缓冲区</strong>。</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">In [3]: acccbdb3210<br>Out[3]: acccbdb<br>In [4]: acccbdb 3210<br>Out[4]: acccbdb<br></code></pre></td></tr></table></figure>
 
-<p>那么如何匹配 <code>]</code> 呢？要将它放在首位，即 <code>%[]abcd]</code>，这样就可以匹配这样的五个字符。同时，<code>%[]</code> 是不合法的，因为这个匹配序列要求非空，实际的警告信息上是缺少了 <code>]</code>。</p>
+<p>那么如何匹配 <code>]</code> 呢？要将它放在首位，即 <code>%[]abcd]</code>，这样就可以匹配这样的五个字符。同时，<code>%[]</code> 是不合法的，因为这个匹配序列要求非空，实际的警告信息是：缺少 <code>]</code>。</p>
 <h2 id="排除指定字符"><a href="#排除指定字符" class="headerlink" title="排除指定字符"></a>排除指定字符</h2><p>使用 <code>^</code> 可以排除指定字符，使用时，必须将 <code>^</code> 放在 <code>[</code> 后的第一个位置，这时候，<strong>整个列表中</strong> 的都是被排除的字符。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> s[<span class="hljs-number">1024</span>];<br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[^abcd]&quot;</span>, s);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br></code></pre></td></tr></table></figure>
 
@@ -381,7 +381,53 @@
 <blockquote>
 <p>你有没有想过，为什么不允许同时出现匹配列表和排除列表呢？如果这样的话，那不是多此一举吗？</p>
 </blockquote>
-<h2 id="匹配字符范围"><a href="#匹配字符范围" class="headerlink" title="匹配字符范围"></a>匹配字符范围</h2><h1 id="术语表-x2F-Glossary"><a href="#术语表-x2F-Glossary" class="headerlink" title="术语表 &#x2F; Glossary"></a>术语表 &#x2F; Glossary</h1><table>
+<h2 id="匹配或者排除字符范围"><a href="#匹配或者排除字符范围" class="headerlink" title="匹配或者排除字符范围"></a>匹配或者排除字符范围</h2><p>标准中规定，当 <code>-</code> 不是第一个，或者不是最后一个，或者当第一个是 <code>^</code> 且 <code>-</code> 不是第二个字符时，这个行为是 <strong>依实现定义的行为（implementation-defined）</strong>，要求编译器给出自己的定义，并在文档中写明。</p>
+<p>但常用的编译器都会将这样的 <code>-</code> 用来表示字符范围，比如 <code>a-d</code> 可以被理解为 <code>abcd</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> s[<span class="hljs-number">1024</span>];<br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[a-zA-Z]&quot;</span>, s);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br></code></pre></td></tr></table></figure>
+
+<p>这个例子可以匹配所有的英文字母，当遇到非字母时便会停止。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">In [7]: qwErt123456yuIop<br>Out[7]: qwErt<br></code></pre></td></tr></table></figure>
+
+<p>若将 <code>^</code> 置于首位，同样可以使用 <code>-</code> 来排除字符范围。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> s[<span class="hljs-number">1024</span>];<br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[^0-9+*/-]&quot;</span>, s);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br></code></pre></td></tr></table></figure>
+
+<p>这个例子就排除了所有的数字与 <code>+-*/</code> 这四个符号（注意，要将 <code>-</code> 放在最后一个，或者紧跟 <code>^</code>，不然会被误解）。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">In [8]: qwErt123456yuIop<br>Out[8]: qwErt<br>In [9]: abcd+acbd<br>Out[9]: abcd<br></code></pre></td></tr></table></figure>
+
+<h1 id="综合应用实例"><a href="#综合应用实例" class="headerlink" title="综合应用实例"></a>综合应用实例</h1><h2 id="读取函数名及参数"><a href="#读取函数名及参数" class="headerlink" title="读取函数名及参数"></a>读取函数名及参数</h2><p>现有三种函数：<code>plus(x,y)</code>，<code>aver(x,y)</code>，<code>multiply(x,y)</code>，分别表示对两数求和、平均（整除即可）、相乘。现需要读取这些函数，并分别计算结果。保证 <code>x,y</code> 均以字面量呈现，且均为正整数，函数调用中不含空格。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">char</span> name[<span class="hljs-number">10</span>];<br>    <span class="hljs-type">int</span>  opx, opy;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[^(](%d,%d%*[)\n]&quot;</span>, name, &amp;opx, &amp;opy) != EOF) &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">&quot;plus&quot;</span>, name) == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, opx + opy);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">&quot;aver&quot;</span>, name) == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, (opx + opy) / <span class="hljs-number">2</span>);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">&quot;multiply&quot;</span>, name) == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, opx * opy);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>重点看一看第 7 行，转换的指示符可以分为三个部分：</p>
+<ul>
+<li><p><code>%[^(]</code> 读取函数名，遇到 <code>(</code> 会结束。</p>
+</li>
+<li><p><code>(%d,%d</code> 是最简单的读取方式，匹配类似 <code>(234,432</code> 这样子的，会读取两个变量。</p>
+</li>
+<li><p><code>%*[)\n]</code> 用来过滤行尾，吸收 <code>)</code> 与 <strong>可能存在</strong> 的换行，会直接丢弃。</p>
+</li>
+</ul>
+<p>输入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">plus(234,432)<br>aver(1,6)<br>multiply(4,1)<br>plus(2,9)<br></code></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">666<br>3<br>4<br>11<br></code></pre></td></tr></table></figure>
+
+<p><strong>千万要注意换行的读取！使用方括号匹配不会自动忽略换行！</strong></p>
+<h2 id="读取单词"><a href="#读取单词" class="headerlink" title="读取单词"></a>读取单词</h2><p>从一篇文章中读取单词，并分行输出。单词仅有大小写字母组成，单词间由空格、换行、标点符号间隔。保证不会出现类似 <code>I&#39;m</code> 形式的单词。</p>
+<blockquote>
+<p>警告：此例子在实践中出现过奇怪现象，必须先单独过滤一下非单词字符，并在读取时先读取单词，否则会死循环。我的意思是，<strong>弄不清楚的情况下请务必谨慎使用</strong>！</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    FILE *in = fopen(<span class="hljs-string">&quot;in.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>);<br>    <span class="hljs-type">char</span>  word[<span class="hljs-number">1024</span>];<br>    <span class="hljs-built_in">fscanf</span>(in, <span class="hljs-string">&quot;%*[^a-zA-Z]&quot;</span>);<br>    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">fscanf</span>(in, <span class="hljs-string">&quot;%[a-zA-Z]%*[^a-zA-Z]&quot;</span>, word) != EOF) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, word);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在第 6 行中，读取了所有的非字母字符，并直接丢弃。在 第 7 行，使用 <code>%[a-zA-Z]</code> 读取单词，并在稍后使用 <code>%*[^a-zA-Z]</code> 清除非字母字符。</p>
+<p>输入（in.txt）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">...Hello, world!<br>..&quot;The C Language is SO--NICE--!&quot; You see<br></code></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text">Hello<br>world<br>The<br>C<br>Language<br>is<br>SO<br>NICE<br>You<br>see<br></code></pre></td></tr></table></figure>
+
+<p>正如上面的警告所说，关于开头有没有非单词字符的两种情况，可能会出现一些问题，如果弄不清楚就不要用了，或者使用通常的 <code>while-getchar-ungetc</code> 过滤，只使用 <code>%[a-zA-Z]</code> 读取单词。</p>
+<h1 id="术语表-x2F-Glossary"><a href="#术语表-x2F-Glossary" class="headerlink" title="术语表 &#x2F; Glossary"></a>术语表 &#x2F; Glossary</h1><table>
 <thead>
 <tr>
 <th align="center">标准中的原文</th>
@@ -417,12 +463,12 @@
 <td align="center">依实现定义的行为</td>
 </tr>
 </tbody></table>
-<h1 id="附录-x2F-Appendix"><a href="#附录-x2F-Appendix" class="headerlink" title="附录 &#x2F; Appendix"></a>附录 &#x2F; Appendix</h1><h2 id="实验证明最大域宽度不包含-0"><a href="#实验证明最大域宽度不包含-0" class="headerlink" title="实验证明最大域宽度不包含 \0"></a>实验证明最大域宽度不包含 <code>\0</code></h2><p><a href="#scanf-%E7%9A%84-%E2%80%9C%E8%BD%AC%E6%8D%A2%E6%8C%87%E4%BB%A4%E2%80%9D-%E7%9A%84%E7%BB%84%E6%88%90">跳转回去</a></p>
+<h1 id="附录-x2F-Appendix"><a href="#附录-x2F-Appendix" class="headerlink" title="附录 &#x2F; Appendix"></a>附录 &#x2F; Appendix</h1><h2 id="实验证明最大域宽度不包含-0"><a href="#实验证明最大域宽度不包含-0" class="headerlink" title="实验证明最大域宽度不包含 \0"></a>实验证明最大域宽度不包含 <code>\0</code></h2><p><a href="#%E6%A0%87%E5%87%86%E6%80%8E%E4%B9%88%E8%AF%B4%EF%BC%9Ascanf-%E7%9A%84-%E2%80%9C%E8%BD%AC%E6%8D%A2%E6%8C%87%E4%BB%A4%E2%80%9D-%E5%8F%8A%E5%85%B6%E7%BB%84%E6%88%90">跳转回去</a></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">char</span> s[<span class="hljs-number">8</span>], c;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%8s&quot;</span>, s);<br>    c = <span class="hljs-string">&#x27;*&#x27;</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>如上，构造连续内存，使 <code>c</code> 紧跟 <code>s</code> 之后，以消除被添加的 <code>\0</code>。当输入为：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678<br></code></pre></td></tr></table></figure>
 
-<p>时，输出结果为：</p>
+<p>时，输出结果如下，可能未必相同，因为越界本身是未定义行为。</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678*<br></code></pre></td></tr></table></figure>
 
 <p>如果不指定位宽 <code>8</code>，那么会像正常那样读到空白符，并一股脑儿丢掉。</p>
