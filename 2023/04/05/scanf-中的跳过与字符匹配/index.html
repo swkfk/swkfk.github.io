@@ -24,7 +24,7 @@
 <meta property="og:description" content="【TBC】scanf() 有很多鲜知的知识，用好了可以很方便 ~">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-05T14:21:35.000Z">
-<meta property="article:modified_time" content="2023-04-05T16:18:14.259Z">
+<meta property="article:modified_time" content="2023-04-06T00:53:29.959Z">
 <meta property="article:author" content="kai_Ker">
 <meta property="article:tag" content="C">
 <meta name="twitter:card" content="summary_large_image">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          2.1k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          13 分钟
+          18 分钟
         
       </span>
     
@@ -362,21 +362,26 @@
 
 <p>这时候会忽略前 8 个字符（假定输入没有空白字符），从第九个开始读取：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">In [2]: 1234567890<br>Out[2]: 90<br></code></pre></td></tr></table></figure>
-
-<p>如上，构造连续内存，使 <code>c</code> 紧跟 <code>s</code> 之后，以消除被添加的 <code>\0</code>。当输入为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678<br></code></pre></td></tr></table></figure>
-
-<p>时，输出结果为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678*<br></code></pre></td></tr></table></figure>
-
-<p>如果不指定位宽 <code>8</code>，那么会像正常那样读到空白符，并一股脑儿丢掉。</p>
 <h1 id="scanset-与指定字符匹配"><a href="#scanset-与指定字符匹配" class="headerlink" title="scanset 与指定字符匹配"></a>scanset 与指定字符匹配</h1><h2 id="匹配指定字符"><a href="#匹配指定字符" class="headerlink" title="匹配指定字符"></a>匹配指定字符</h2><p>标准中提到，类型指示符除了通常的 <code>d,c,s</code> 等等，还有一个 <code>[</code>，用来读取字符串，但是只读取列表中指定的字符。看一个简单的例子，只读取 <code>abcd</code> 四个字母：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> s[<span class="hljs-number">1024</span>];<br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[abcd]&quot;</span>, s);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br></code></pre></td></tr></table></figure>
 
 <p>当遇到其他字符（包括空白符）会 <strong>结束匹配</strong>，并将剩下的 <strong>留在缓冲区</strong>。</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">In [3]: acccbdb3210<br>Out[3]: acccbdb<br>In [4]: acccbdb 3210<br>Out[4]: acccbdb<br></code></pre></td></tr></table></figure>
 
-<h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><h1 id="术语表-x2F-Glossary"><a href="#术语表-x2F-Glossary" class="headerlink" title="术语表 &#x2F; Glossary"></a>术语表 &#x2F; Glossary</h1><table>
+<p>那么如何匹配 <code>]</code> 呢？要将它放在首位，即 <code>%[]abcd]</code>，这样就可以匹配这样的五个字符。同时，<code>%[]</code> 是不合法的，因为这个匹配序列要求非空，实际的警告信息上是缺少了 <code>]</code>。</p>
+<h2 id="排除指定字符"><a href="#排除指定字符" class="headerlink" title="排除指定字符"></a>排除指定字符</h2><p>使用 <code>^</code> 可以排除指定字符，使用时，必须将 <code>^</code> 放在 <code>[</code> 后的第一个位置，这时候，<strong>整个列表中</strong> 的都是被排除的字符。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> s[<span class="hljs-number">1024</span>];<br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%[^abcd]&quot;</span>, s);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br></code></pre></td></tr></table></figure>
+
+<p>这样，可以排除这四个字母，一旦遇到，便会停止读取。注意，同 <code>%s</code> 不一样，空格、换行等字符会被读取（除非排除了它们）。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">In [5]: 123acd<br>Out[5]: 123<br>In [6]: <br>        321<br>        123<br>        ca<br>Out[6]: <br>        321<br>        123<br></code></pre></td></tr></table></figure>
+
+<p>那么如何匹配 <code>^</code> 呢？<strong>不能</strong> 将它放在首位，如 <code>%[abcd^]</code>，这样就可以匹配这样的五个字符。</p>
+<p>那么如何排除 <code>^</code> 呢？<code>%[^^]</code>，这样就可以啦 ^_^。</p>
+<p>那么如何排除 <code>]</code> 呢？同样要将它放在首位，即 <code>%[^]abcd]</code>，这样就可以排这样的五个字符。同时，<code>%[^]</code> 是不合法的，因为缺少 <code>]</code>。</p>
+<blockquote>
+<p>你有没有想过，为什么不允许同时出现匹配列表和排除列表呢？如果这样的话，那不是多此一举吗？</p>
+</blockquote>
+<h2 id="匹配字符范围"><a href="#匹配字符范围" class="headerlink" title="匹配字符范围"></a>匹配字符范围</h2><h1 id="术语表-x2F-Glossary"><a href="#术语表-x2F-Glossary" class="headerlink" title="术语表 &#x2F; Glossary"></a>术语表 &#x2F; Glossary</h1><table>
 <thead>
 <tr>
 <th align="center">标准中的原文</th>
@@ -407,11 +412,20 @@
 <td align="center">length modifier</td>
 <td align="center">长度修饰符</td>
 </tr>
+<tr>
+<td align="center">implementation-defined behavior</td>
+<td align="center">依实现定义的行为</td>
+</tr>
 </tbody></table>
 <h1 id="附录-x2F-Appendix"><a href="#附录-x2F-Appendix" class="headerlink" title="附录 &#x2F; Appendix"></a>附录 &#x2F; Appendix</h1><h2 id="实验证明最大域宽度不包含-0"><a href="#实验证明最大域宽度不包含-0" class="headerlink" title="实验证明最大域宽度不包含 \0"></a>实验证明最大域宽度不包含 <code>\0</code></h2><p><a href="#scanf-%E7%9A%84-%E2%80%9C%E8%BD%AC%E6%8D%A2%E6%8C%87%E4%BB%A4%E2%80%9D-%E7%9A%84%E7%BB%84%E6%88%90">跳转回去</a></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">char</span> s[<span class="hljs-number">8</span>], c;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%8s&quot;</span>, s);<br>    c = <span class="hljs-string">&#x27;*&#x27;</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, s);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如上，构造连续内存，使 <code>c</code> 紧跟 <code>s</code> 之后，以消除被添加的 <code>\0</code>。当输入为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678<br></code></pre></td></tr></table></figure>
 
+<p>时，输出结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">12345678*<br></code></pre></td></tr></table></figure>
 
+<p>如果不指定位宽 <code>8</code>，那么会像正常那样读到空白符，并一股脑儿丢掉。</p>
 <h1 id="参考文献-x2F-Reference"><a href="#参考文献-x2F-Reference" class="headerlink" title="参考文献 &#x2F; Reference"></a>参考文献 &#x2F; Reference</h1><p>[1] ISO&#x2F;IEC 9899:TC3</p>
 
                 
