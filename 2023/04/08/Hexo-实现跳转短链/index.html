@@ -26,8 +26,9 @@
 <meta property="og:image" content="https://swkfk.github.io/img/jump-tag.png">
 <meta property="og:image" content="https://swkfk.github.io/img/jump-file.png">
 <meta property="og:image" content="https://swkfk.github.io/img/jump-pos.png">
+<meta property="og:image" content="https://swkfk.github.io/img/jump-enable.png">
 <meta property="article:published_time" content="2023-04-08T13:50:37.000Z">
-<meta property="article:modified_time" content="2023-04-08T14:17:00.059Z">
+<meta property="article:modified_time" content="2023-04-08T14:26:31.175Z">
 <meta property="article:author" content="kai_Ker">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="工具">
@@ -285,7 +286,7 @@
         
         
         
-          24 分钟
+          25 分钟
         
       </span>
     
@@ -352,7 +353,9 @@
 
 <p>具体位置为：第一个 <code>&lt;div class=&quot;mt-3&quot;&gt;</code> 标签的闭标签前。如下图所示：</p>
 <p><img src="/img/jump-pos.png" srcset="/img/loading.gif" lazyload alt="添加位置"></p>
-<p>注意，这个复制会复制绝对地址，其站名为 <code>_config.yml</code> 中定义的 <code>url</code>。</p>
+<p>注意，这个复制会复制绝对地址，其站名为 <code>_config.yml</code> 中定义的 <code>url</code>。同时，需要在 Fluid 的配置文件中，添加 <code>jump: enable: true</code>，如下图所示：</p>
+<p><img src="/img/jump-enable.png" srcset="/img/loading.gif" lazyload alt="添加配置"></p>
+<p>层次结构为 <code>post-&gt;meta-&gt;jump-&gt;enable</code>。</p>
 
                 
               </div>
