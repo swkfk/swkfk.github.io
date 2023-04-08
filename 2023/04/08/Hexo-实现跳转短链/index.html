@@ -16,23 +16,27 @@
   <meta name="author" content="kai_Ker">
   <meta name="keywords" content="">
   
-    <meta name="description" content="警告：此文章方法不能应对所有情况。甚至于在大多数情况是没有用的。  之前看网上的资料，大部分都是用 python-docx 库来删除 word 文档的页眉、页脚： 1header.is_linked_to_previous &#x3D; True  但是实际使用下来，问题不少，也不能保证所有页面（尤其是第一页）的页眉、页脚都被有效清除。于是我想使用 win32com ，但网上的资料实在太少。经过一番探索，">
+    <meta name="description" content="太棒了，可以逃离那些乱七八糟、又极其丑陋的长链接了！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python 批量删除 word 中所有页眉、页脚">
-<meta property="og:url" content="https://swkfk.github.io/2021/02/19/Python-%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4-word-%E4%B8%AD%E6%89%80%E6%9C%89%E9%A1%B5%E7%9C%89%E3%80%81%E9%A1%B5%E8%84%9A/index.html">
+<meta property="og:title" content="Hexo 实现跳转短链">
+<meta property="og:url" content="https://swkfk.github.io/2023/04/08/Hexo-%E5%AE%9E%E7%8E%B0%E8%B7%B3%E8%BD%AC%E7%9F%AD%E9%93%BE/index.html">
 <meta property="og:site_name" content="kai_Ker&#39;s blog">
-<meta property="og:description" content="警告：此文章方法不能应对所有情况。甚至于在大多数情况是没有用的。  之前看网上的资料，大部分都是用 python-docx 库来删除 word 文档的页眉、页脚： 1header.is_linked_to_previous &#x3D; True  但是实际使用下来，问题不少，也不能保证所有页面（尤其是第一页）的页眉、页脚都被有效清除。于是我想使用 win32com ，但网上的资料实在太少。经过一番探索，">
+<meta property="og:description" content="太棒了，可以逃离那些乱七八糟、又极其丑陋的长链接了！">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-19T00:35:41.000Z">
-<meta property="article:modified_time" content="2023-03-18T07:47:40.005Z">
+<meta property="og:image" content="https://swkfk.github.io/img/jump-tag.png">
+<meta property="og:image" content="https://swkfk.github.io/img/jump-file.png">
+<meta property="og:image" content="https://swkfk.github.io/img/jump-pos.png">
+<meta property="article:published_time" content="2023-04-08T13:50:37.000Z">
+<meta property="article:modified_time" content="2023-04-08T14:12:17.228Z">
 <meta property="article:author" content="kai_Ker">
-<meta property="article:tag" content="Python">
-<meta property="article:tag" content="Office">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://swkfk.github.io/img/jump-tag.png">
   
   
   
-  <title>Python 批量删除 word 中所有页眉、页脚 - kai_Ker&#39;s blog</title>
+  <title>Hexo 实现跳转短链 - kai_Ker&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -240,7 +244,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Python 批量删除 word 中所有页眉、页脚"></span>
+            <span id="subtitle" data-typed-text="Hexo 实现跳转短链"></span>
           
         </div>
 
@@ -251,12 +255,17 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-02-19 08:35" pubdate>
-          2021年2月19日 周五
+        <time datetime="2023-04-08 21:50" pubdate>
+          2023年4月8日 周六
         </time>
       </span>
     
 
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-bookmark-fill"></i>
+        <span onclick="navigator.clipboard.writeText('https://swkfk.github.io/jump/jump');alert('复制成功（jump）')"> JumpLink: jump </span>
+      </span>
     
   </div>
 
@@ -265,7 +274,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          2.8k 字
         
       </span>
     
@@ -276,7 +285,7 @@
         
         
         
-          11 分钟
+          24 分钟
         
       </span>
     
@@ -322,26 +331,26 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Python 批量删除 word 中所有页眉、页脚</h1>
+            <h1 style="display: none">Hexo 实现跳转短链</h1>
             
             
               <div class="markdown-body">
                 
-                <blockquote>
-<p>警告：此文章方法不能应对所有情况。甚至于在大多数情况是没有用的。</p>
-</blockquote>
-<p>之前看网上的资料，大部分都是用 <code>python-docx</code> 库来删除 word 文档的页眉、页脚：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">header.is_linked_to_previous = <span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+                <p>先叠甲：我不会 JS，也不会 ejs（所以代码写的很不专业，但应该能用），这些都是现学或者是模仿来的，其他的参考内容是官方文档以及 Hexo 和 Fluid 相关源码。</p>
+<h1 id="先看效果"><a href="#先看效果" class="headerlink" title="先看效果"></a>先看效果</h1><p>点击这个链接：<a href="https://swkfk.github.io/jump/jump">https://swkfk.github.io/jump/jump</a>，你便可以来到这篇文章。其中，第一个 <code>jump</code> 是写死在代码里的，当然你可以改。第二个 <code>jump</code> 是自定义的跳转关键词。同时，这篇文章的大标题下方，会出现一个标签，点击便可以复制链接（我知道很丑，但我不知道应该怎样让它更漂亮一点）。</p>
+<p>而且，更重要的是，我的这个整套流程，是自动生成的，使用时只需要在文章开头增加一个标签即可，如下图所示：</p>
+<p><img src="/img/jump-tag.png" srcset="/img/loading.gif" lazyload alt="跳转的设置"></p>
+<h1 id="实现短链跳转"><a href="#实现短链跳转" class="headerlink" title="实现短链跳转"></a>实现短链跳转</h1><p>关键在于让 Hexo 在生成的时候，执行我们写的程序。在 <strong>Hexo 根目录</strong> 下新建文件夹 <code>scripts</code>，在其中新建一个 JavaScript 文件，如下图所示：</p>
+<p><img src="/img/jump-file.png" srcset="/img/loading.gif" lazyload alt="文件组织结构"></p>
+<p>其中的脚本会在 Hexo 的任何命令之前自动执行（这其实是不合预期的，因为在 <code>hexo clean</code> 的时候也会执行，但是问题不大，因为这里面的脚本是率先执行的）。脚本代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> log = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;hexo-log&#x27;</span>)(&#123;<br>    <span class="hljs-attr">debug</span>: <span class="hljs-literal">false</span>,<br>    <span class="hljs-attr">silent</span>: <span class="hljs-literal">false</span><br>&#125;);<br><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;hexo-fs&#x27;</span>);<br><span class="hljs-keyword">const</span> fm = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;hexo-front-matter&#x27;</span>);<br><span class="hljs-keyword">const</span> util = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;hexo-util&#x27;</span>);<br><br><span class="hljs-keyword">const</span> permalink = <span class="hljs-keyword">new</span> util.<span class="hljs-title class_">Permalink</span>(<span class="hljs-string">&#x27;:year/:month/:day/:title&#x27;</span>, &#123;<br>    <span class="hljs-attr">segments</span>: &#123;<br>        <span class="hljs-attr">year</span>: <span class="hljs-regexp">/(\d&#123;4&#125;)/</span>,<br>        <span class="hljs-attr">month</span>: <span class="hljs-regexp">/(\d&#123;2&#125;)/</span>,<br>        <span class="hljs-attr">day</span>: <span class="hljs-regexp">/(\d&#123;2&#125;)/</span><br>    &#125;<br>&#125;);<br><br>log.<span class="hljs-title function_">info</span>(<span class="hljs-string">&quot;Jump page generator by kai_Ker&quot;</span>);<br><br><span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;<br><br><span class="hljs-keyword">let</span> jump_path = <span class="hljs-string">&#x27;public/jump/&#x27;</span>;<br><span class="hljs-keyword">let</span> post_path = <span class="hljs-string">&#x27;source/_posts/&#x27;</span>;<br><br><br><span class="hljs-keyword">if</span> (!fs.<span class="hljs-title function_">exists</span>(jump_path)) &#123;<br>    fs.<span class="hljs-title function_">mkdir</span>(jump_path);<br>&#125;<br><br><br><span class="hljs-keyword">let</span> posts = fs.<span class="hljs-title function_">listDirSync</span>(post_path);<br>posts.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">full_name</span> =&gt;</span> &#123;<br>    <span class="hljs-keyword">let</span> file_name = full_name.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, full_name.<span class="hljs-title function_">lastIndexOf</span>(<span class="hljs-string">&quot;.&quot;</span>));<br>    <span class="hljs-keyword">let</span> content = fs.<span class="hljs-title function_">readFileSync</span>(post_path + full_name);<br>    <span class="hljs-keyword">let</span> data = fm.<span class="hljs-title function_">parse</span>(content);<br>    <span class="hljs-keyword">if</span> (!data.<span class="hljs-property">jump</span>) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!data.<span class="hljs-property">date</span>) &#123;<br>        log.<span class="hljs-title function_">error</span>(<span class="hljs-string">&quot;Can&#x27;t read date of the page: &quot;</span> + data.<span class="hljs-property">title</span>);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br><br>    <span class="hljs-keyword">let</span> ori_url = permalink.<span class="hljs-title function_">stringify</span>(<br>        &#123;<br>            <span class="hljs-string">&quot;year&quot;</span>: data.<span class="hljs-property">date</span>.<span class="hljs-title function_">getFullYear</span>().<span class="hljs-title function_">toString</span>(),<br>            <span class="hljs-string">&quot;month&quot;</span>: (data.<span class="hljs-property">date</span>.<span class="hljs-title function_">getMonth</span>() + <span class="hljs-number">1</span>).<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">padStart</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;0&#x27;</span>),<br>            <span class="hljs-string">&quot;day&quot;</span>: data.<span class="hljs-property">date</span>.<span class="hljs-title function_">getDate</span>().<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">padStart</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;0&#x27;</span>),<br>            <span class="hljs-string">&quot;title&quot;</span>: file_name<br>        &#125;<br>    )<br><br>    <span class="hljs-keyword">if</span> (!fs.<span class="hljs-title function_">exists</span>(jump_path + data.<span class="hljs-property">jump</span>)) &#123;<br>        fs.<span class="hljs-title function_">mkdirs</span>(jump_path + data.<span class="hljs-property">jump</span>)<br>    &#125;<br><br>    fs.<span class="hljs-title function_">writeFile</span>(jump_path + data.<span class="hljs-property">jump</span> + <span class="hljs-string">&quot;/index.html&quot;</span>, <span class="hljs-string">&quot;&lt;script language=&#x27;javascript&#x27; type=&#x27;text/javascript&#x27;&gt;window.location.replace(&#x27;/&quot;</span> + ori_url + <span class="hljs-string">&quot;&#x27;)&lt;/script&gt;&quot;</span>);<br><br>    log.<span class="hljs-title function_">info</span>(ori_url + <span class="hljs-string">&quot; ==&gt; &quot;</span> + data.<span class="hljs-property">jump</span>)<br>    count += <span class="hljs-number">1</span>;<br>&#125;);<br><br>log.<span class="hljs-title function_">info</span>(count + <span class="hljs-string">&quot; jump page(s) generated @ &quot;</span> + jump_path);<br></code></pre></td></tr></table></figure>
 
-<p>但是实际使用下来，问题不少，也不能保证所有页面（尤其是第一页）的页眉、页脚都被有效清除。<br>于是我想使用 <code>win32com</code> ，但网上的资料实在太少。经过一番探索，我得出了下面的方法：</p>
-<p>首先安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install pypiwin32<br></code></pre></td></tr></table></figure>
+<h1 id="添加复制链接的按钮"><a href="#添加复制链接的按钮" class="headerlink" title="添加复制链接的按钮"></a>添加复制链接的按钮</h1><p>警告：仅适用于 Fluid 主题！</p>
+<p>定位到模板文件：<code>node_modules\hexo-theme-fluid\layout\_partials\post\meta-top.ejs</code>，添加如下内容：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html">&lt;% if (theme.post.meta.jump.enable &amp;&amp; is_post() &amp;&amp; page.jump) &#123; %&gt;<br>  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;post-meta mr-2&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">i</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;iconfont icon-bookmark-fill&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">i</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;navigator.clipboard.writeText(&#x27;&lt;%- full_url_for(&#x27;/jump/&#x27; + page.jump) %&gt;&#x27;);alert(&#x27;复制成功（&lt;%- trim(page.jump) %&gt;）&#x27;)&quot;</span>&gt;</span> JumpLink: &lt;%- trim(page.jump) %&gt; <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>&lt;% &#125; %&gt;<br></code></pre></td></tr></table></figure>
 
-<p>编写 python 代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> win32com <span class="hljs-keyword">import</span> client<br><br><span class="hljs-comment"># 用来进行 word 文档的打开、保存、关闭操作</span><br>word = client.DispatchEx(<span class="hljs-string">&quot;Word.Application&quot;</span>)<br><br><span class="hljs-comment"># 删除页眉、页脚的核心</span><br>wb = client.DispatchEx(<span class="hljs-string">&quot;Word.Basic&quot;</span>)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">removeHeaderFooter</span>(<span class="hljs-params">file</span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">        Para: file: word文档路径，需要包括文件名、拓展名</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-comment"># 打开文档，注意参数要是绝对路径，可以使用 os 库的方法进行转化</span><br>    wordDoc = word.Documents.Open(os.path.abspath(file), ReadOnly=<span class="hljs-number">0</span>)<br>    <br>    <span class="hljs-comment"># 调用 Word.Basic 来进行操作</span><br>    <span class="hljs-comment"># 注意后面没有表示函数的括号</span><br>    wb.RemoveHeader<br>    wb.RemoveFooter<br><br>    <span class="hljs-comment"># 保存文件，此外还可以为 SaveAs 函数增加 FileFormat=17 参数来保存为 pdf 文件（拓展名需要更改一下）</span><br>    wordDoc.SaveAs(os.path.abspath(file))<br><br>    <span class="hljs-comment"># 注意，一定要关闭文件，因此建议将上面内容用 try 包起来，确保文件关闭</span><br>    <span class="hljs-comment"># 如果没有正确关闭，则下次无法正常打开</span><br>    <span class="hljs-comment"># 如有意外，可以将任务管理器中的 WINWORD 进程关闭，并将文件夹内的隐藏文件 ~$... .docx 删掉（可能是隐藏的）</span><br>    wordDoc.Close()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    removeHeaderFooter(<span class="hljs-string">&#x27;test.docx&#x27;</span>)<br><br></code></pre></td></tr></table></figure>
-
-<p>如果需要遍历文件夹内所有 word 文件：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 遍历文件夹</span><br><span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> os.listdir(path):<br>    <span class="hljs-comment"># 判断是文件，且是 word 文件</span><br>    <span class="hljs-keyword">if</span> os.path.isfile(os.path.join(path, name)) <span class="hljs-keyword">and</span> name.split(<span class="hljs-string">&#x27;.&#x27;</span>)[-<span class="hljs-number">1</span>].lower() <span class="hljs-keyword">in</span> [<span class="hljs-string">&#x27;doc&#x27;</span>, <span class="hljs-string">&#x27;docx&#x27;</span>]:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;<span class="hljs-subst">&#123;name&#125;</span>:removing header and footer...&#x27;</span>)<br>        removeHeaderFooter(os.path.join(path, name))<br></code></pre></td></tr></table></figure>
+<p>具体位置为：第一个 <code>&lt;div class=&quot;mt-3&quot;&gt;</code> 标签的闭标签前。如下图所示：</p>
+<p><img src="/img/jump-pos.png" srcset="/img/loading.gif" lazyload alt="添加位置"></p>
 
                 
               </div>
@@ -360,15 +369,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Python-%E6%95%99%E7%A8%8B/" class="category-chain-item">Python 教程</a>
+  <a href="/categories/%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/" class="category-chain-item">建站指南</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/Python-%E6%95%99%E7%A8%8B/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/" class="category-chain-item">实用工具</a>
-  
-  
-
   
 
       </span>
@@ -382,9 +384,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Python/">#Python</a>
+        <a href="/tags/Hexo/">#Hexo</a>
       
-        <a href="/tags/Office/">#Office</a>
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
       
     </div>
   
@@ -396,8 +398,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Python 批量删除 word 中所有页眉、页脚</div>
-      <div>https://swkfk.github.io/2021/02/19/Python-批量删除-word-中所有页眉、页脚/</div>
+      <div>Hexo 实现跳转短链</div>
+      <div>https://swkfk.github.io/2023/04/08/Hexo-实现跳转短链/</div>
     </div>
     <div class="license-meta">
       
@@ -409,7 +411,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2021年2月19日</div>
+          <div>2023年4月8日</div>
         </div>
       
       
@@ -447,15 +449,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/09/%E9%80%97%E5%8F%B7%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E7%AE%80%E5%8D%95%E8%BF%90%E7%94%A8/" title="逗号表达式的介绍与简单运用">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">逗号表达式的介绍与简单运用</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2023/04/05/scanf-%E4%B8%AD%E7%9A%84%E8%B7%B3%E8%BF%87%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/" title="scanf() 中的跳过与字符匹配">
+                        <span class="hidden-mobile">scanf() 中的跳过与字符匹配</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
